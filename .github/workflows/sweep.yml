@@ -1,0 +1,26 @@
+name: Barrido de precios
+
+on:
+  schedule:
+    # Cada 4 horas. Sintaxis cron en UTC.
+    - cron: "0 */4 * * *"
+  workflow_dispatch: {}  # permite lanzarlo a mano desde la pestaña "Actions"
+
+jobs:
+  sweep:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm install
+      - run: npm run sweep
+        env:
+          TRAVELPAYOUTS_TOKEN: ${{ secrets.TRAVELPAYOUTS_TOKEN }}
+          TRAVELPAYOUTS_MARKER: ${{ secrets.TRAVELPAYOUTS_MARKER }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
