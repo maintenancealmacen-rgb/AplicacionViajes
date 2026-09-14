@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Volaganga — Chollos de vuelos y hoteles</title>
+<meta name="description" content="Encuentra chollos de vuelos y hoteles antes de que suban de precio, y planifica tu itinerario en el mismo sitio.">
+<link rel="stylesheet" href="assets/css/style.css">
+
+<!-- Google AdSense (sustituye el publisher ID en config.js y aquí) -->
+<!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3634325920891467" crossorigin="anonymous"></script> -->
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="logo" href="index.html"><span class="dot"></span> Volaganga</a>
+    <nav>
+      <ul class="main-nav">
+        <li><a href="index.html" aria-current="page">Chollos</a></li>
+        <li><a href="itinerarios.html">Itinerarios</a></li>
+        <li><a href="#como-funciona">Cómo funciona</a></li>
+      </ul>
+    </nav>
+    <button class="btn-alert" id="openAlertModal">Avisarme de bajadas</button>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <div>
+      <h1>Los precios bajan un momento. Nosotros te avisamos en ese momento.</h1>
+      <p class="lede">Rastreamos vuelos y hoteles cada día y te mandamos una alerta solo cuando de verdad merece la pena reservar.</p>
+
+      <form class="search-box" id="searchForm">
+        <div>
+          <label for="origin">Origen</label>
+          <input id="origin" type="text" placeholder="Madrid (MAD)">
+        </div>
+        <div>
+          <label for="destination">Destino</label>
+          <input id="destination" type="text" placeholder="Cualquier destino">
+        </div>
+        <button type="submit">Buscar</button>
+      </form>
+    </div>
+
+    <div class="board" aria-label="Tablón de chollos recientes en directo">
+      <div class="board-row">
+        <span class="city">ROMA</span>
+        <span>Vuelta desde Madrid</span>
+        <span class="drop">▼ 65%</span>
+        <span class="price">39 €</span>
+      </div>
+      <div class="board-row">
+        <span class="city">LISBOA</span>
+        <span>Ida y vuelta desde BCN</span>
+        <span class="drop">▼ 60%</span>
+        <span class="price">27 €</span>
+      </div>
+      <div class="board-row">
+        <span class="city">PARÍS</span>
+        <span>Hotel 3 noches</span>
+        <span class="drop">▼ 44%</span>
+        <span class="price">189 €</span>
+      </div>
+      <div class="board-row">
+        <span class="city">MARRAKECH</span>
+        <span>Vuelta desde Málaga</span>
+        <span class="drop">▼ 62%</span>
+        <span class="price">45 €</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<main class="wrap">
+
+  <!-- Bloque de anuncio AdSense: sustituir por tu <ins class="adsbygoogle"> real -->
+  <div class="ad-slot">Espacio publicitario (AdSense) — 728×90</div>
+
+  <section class="section" id="chollos">
+    <div class="section-head">
+      <div>
+        <h2>Chollos activos ahora</h2>
+        <p>Actualizado automáticamente varias veces al día</p>
+      </div>
+    </div>
+
+    <div class="filters">
+      <button class="filter-chip active" data-filter="todos">Todos</button>
+      <button class="filter-chip" data-filter="vuelo">Vuelos</button>
+      <button class="filter-chip" data-filter="hotel">Hoteles</button>
+    </div>
+
+    <div class="deal-grid" id="dealGrid">
+      <!-- Las tarjetas se generan por JS desde assets/js/deals.js -->
+    </div>
+  </section>
+
+  <div class="ad-slot">Espacio publicitario (AdSense) — in-feed</div>
+
+  <section class="section" id="como-funciona">
+    <div class="itinerary-teaser">
+      <div>
+        <h2>¿Ya tienes destino? Móntate el itinerario entero.</h2>
+        <p>Elige tus días y te sugerimos actividades reales, reservables en el momento, sin salir de la página.</p>
+        <a class="link-cta" href="itinerarios.html">Crear un itinerario</a>
+      </div>
+      <div class="mini-timeline">
+        <div><span class="t">09:00</span>Free tour por el centro histórico</div>
+        <div><span class="t">13:30</span>Comida en el mercado local</div>
+        <div><span class="t">17:00</span>Tour en barco al atardecer</div>
+        <div><span class="t">20:30</span>Cena con espectáculo</div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <span>© 2026 Volaganga. Los precios mostrados son orientativos y pueden variar en la web de destino.</span>
+    <span>
+      <a href="#">Aviso legal</a> · <a href="#">Cómo nos financiamos</a>
+    </span>
+  </div>
+</footer>
+
+<!-- Modal de alertas -->
+<div class="modal-backdrop" id="alertModal">
+  <div class="modal">
+    <h3>Avísame de los chollos</h3>
+    <p style="color:var(--text-muted);font-size:0.85rem;margin-top:-6px;">Elige cómo prefieres recibirlos. Puedes activar ambas.</p>
+
+    <div style="border:1px solid var(--line);border-radius:6px;padding:14px;margin-top:14px;">
+      <strong style="font-size:0.9rem;">Por email</strong>
+      <label for="alertEmail">Correo electrónico</label>
+      <input id="alertEmail" type="email" placeholder="tucorreo@ejemplo.com">
+      <label for="alertMinDiscount">Avísame solo si el descuento es de al menos</label>
+      <select id="alertMinDiscount">
+        <option value="20">20%</option>
+        <option value="30" selected>30%</option>
+        <option value="50">50%</option>
+      </select>
+      <button class="btn-primary" id="saveEmailAlert" style="width:100%;margin-top:12px;">Suscribirme por email</button>
+    </div>
+
+    <div style="border:1px solid var(--line);border-radius:6px;padding:14px;margin-top:14px;">
+      <strong style="font-size:0.9rem;">Notificaciones push del navegador</strong>
+      <p style="color:var(--text-muted);font-size:0.82rem;">Recibe un aviso al instante en este dispositivo, sin dar tu email.</p>
+      <button class="btn-primary" id="savePushAlert" style="width:100%;">Activar notificaciones</button>
+    </div>
+
+    <p id="alertStatus" style="font-size:0.85rem;margin-top:12px;"></p>
+
+    <div class="modal-actions">
+      <button class="btn-secondary" id="closeAlertModal">Cerrar</button>
+    </div>
+  </div>
+</div>
+
+<script src="config.js"></script>
+<script src="assets/js/deals.js"></script>
+<script src="assets/js/subscribe.js"></script>
+<script>
+  const modal = document.getElementById("alertModal");
+  const statusEl = document.getElementById("alertStatus");
+  document.getElementById("openAlertModal").addEventListener("click", () => modal.classList.add("open"));
+  document.getElementById("closeAlertModal").addEventListener("click", () => modal.classList.remove("open"));
+
+  document.getElementById("saveEmailAlert").addEventListener("click", async () => {
+    const email = document.getElementById("alertEmail").value.trim();
+    const minDiscount = document.getElementById("alertMinDiscount").value;
+    if (!email) { statusEl.textContent = "Escribe un correo válido."; return; }
+    if (!supabaseConfigured()) {
+      statusEl.textContent = "La base de datos aún no está conectada (config.js pendiente).";
+      return;
+    }
+    statusEl.textContent = "Guardando...";
+    try {
+      await subscribeByEmail(email, null, minDiscount);
+      statusEl.textContent = "Listo. Te avisaremos a " + email + ".";
+    } catch (err) {
+      statusEl.textContent = err.message;
+    }
+  });
+
+  document.getElementById("savePushAlert").addEventListener("click", async () => {
+    if (!supabaseConfigured()) {
+      statusEl.textContent = "La base de datos aún no está conectada (config.js pendiente).";
+      return;
+    }
+    statusEl.textContent = "Pidiendo permiso...";
+    try {
+      await subscribeToPush(30);
+      statusEl.textContent = "Notificaciones activadas en este dispositivo.";
+    } catch (err) {
+      statusEl.textContent = err.message;
+    }
+  });
+
+  document.getElementById("searchForm").addEventListener("submit", (e) => {
+    e.preventDefault();
+    const dest = document.getElementById("destination").value.trim();
+    document.querySelector('.filter-chip[data-filter="todos"]').click();
+    if (dest) {
+      document.getElementById("dealGrid").scrollIntoView({ behavior: "smooth" });
+    }
+  });
+</script>
+
+</body>
+</html>

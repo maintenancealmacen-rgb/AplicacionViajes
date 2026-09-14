@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Crea tu itinerario — Volaganga</title>
+<meta name="description" content="Planifica tu viaje día a día y reserva actividades directamente.">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="logo" href="index.html"><span class="dot"></span> Volaganga</a>
+    <nav>
+      <ul class="main-nav">
+        <li><a href="index.html">Chollos</a></li>
+        <li><a href="itinerarios.html" aria-current="page">Itinerarios</a></li>
+        <li><a href="index.html#como-funciona">Cómo funciona</a></li>
+      </ul>
+    </nav>
+    <button class="btn-alert" id="openAlertModal">Avisarme de bajadas</button>
+  </div>
+</header>
+
+<main class="wrap section">
+  <div class="section-head">
+    <div>
+      <h2>Monta tu itinerario</h2>
+      <p>Elige destino y días, y te proponemos un plan reservable</p>
+    </div>
+  </div>
+
+  <div class="builder">
+    <form class="builder-panel" id="itineraryForm">
+      <label for="itDestino">Destino</label>
+      <input id="itDestino" type="text" placeholder="Roma, París, Lisboa..." value="Roma">
+
+      <label for="itDias">Número de días</label>
+      <select id="itDias">
+        <option value="1">1 día</option>
+        <option value="2">2 días</option>
+        <option value="3" selected>3 días</option>
+        <option value="4">4 días</option>
+        <option value="5">5 días</option>
+      </select>
+
+      <button type="submit">Generar plan</button>
+    </form>
+
+    <div id="itineraryResult">
+      <div class="empty-state">Elige un destino y pulsa "Generar plan" para ver tu itinerario.</div>
+    </div>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <span>© 2026 Volaganga. Las actividades se reservan en la web del proveedor.</span>
+    <span><a href="#">Aviso legal</a> · <a href="#">Cómo nos financiamos</a></span>
+  </div>
+</footer>
+
+<div class="modal-backdrop" id="alertModal">
+  <div class="modal">
+    <h3>Avísame de los chollos</h3>
+    <p style="color:var(--text-muted);font-size:0.85rem;margin-top:-6px;">Elige cómo prefieres recibirlos. Puedes activar ambas.</p>
+
+    <div style="border:1px solid var(--line);border-radius:6px;padding:14px;margin-top:14px;">
+      <strong style="font-size:0.9rem;">Por email</strong>
+      <label for="alertEmail">Correo electrónico</label>
+      <input id="alertEmail" type="email" placeholder="tucorreo@ejemplo.com">
+      <label for="alertMinDiscount">Avísame solo si el descuento es de al menos</label>
+      <select id="alertMinDiscount">
+        <option value="20">20%</option>
+        <option value="30" selected>30%</option>
+        <option value="50">50%</option>
+      </select>
+      <button class="btn-primary" id="saveEmailAlert" style="width:100%;margin-top:12px;">Suscribirme por email</button>
+    </div>
+
+    <div style="border:1px solid var(--line);border-radius:6px;padding:14px;margin-top:14px;">
+      <strong style="font-size:0.9rem;">Notificaciones push del navegador</strong>
+      <p style="color:var(--text-muted);font-size:0.82rem;">Recibe un aviso al instante en este dispositivo, sin dar tu email.</p>
+      <button class="btn-primary" id="savePushAlert" style="width:100%;">Activar notificaciones</button>
+    </div>
+
+    <p id="alertStatus" style="font-size:0.85rem;margin-top:12px;"></p>
+
+    <div class="modal-actions">
+      <button class="btn-secondary" id="closeAlertModal">Cerrar</button>
+    </div>
+  </div>
+</div>
+
+<script src="config.js"></script>
+<script src="assets/js/itinerary.js"></script>
+<script src="assets/js/subscribe.js"></script>
+<script>
+  const modal = document.getElementById("alertModal");
+  const statusEl = document.getElementById("alertStatus");
+  document.getElementById("openAlertModal").addEventListener("click", () => modal.classList.add("open"));
+  document.getElementById("closeAlertModal").addEventListener("click", () => modal.classList.remove("open"));
+
+  document.getElementById("saveEmailAlert").addEventListener("click", async () => {
+    const email = document.getElementById("alertEmail").value.trim();
+    const minDiscount = document.getElementById("alertMinDiscount").value;
+    if (!email) { statusEl.textContent = "Escribe un correo válido."; return; }
+    if (!supabaseConfigured()) {
+      statusEl.textContent = "La base de datos aún no está conectada (config.js pendiente).";
+      return;
+    }
+    statusEl.textContent = "Guardando...";
+    try {
+      await subscribeByEmail(email, null, minDiscount);
+      statusEl.textContent = "Listo. Te avisaremos a " + email + ".";
+    } catch (err) {
+      statusEl.textContent = err.message;
+    }
+  });
+
+  document.getElementById("savePushAlert").addEventListener("click", async () => {
+    if (!supabaseConfigured()) {
+      statusEl.textContent = "La base de datos aún no está conectada (config.js pendiente).";
+      return;
+    }
+    statusEl.textContent = "Pidiendo permiso...";
+    try {
+      await subscribeToPush(30);
+      statusEl.textContent = "Notificaciones activadas en este dispositivo.";
+    } catch (err) {
+      statusEl.textContent = err.message;
+    }
+  });
+</script>
+
+</body>
+</html>
